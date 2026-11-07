@@ -197,8 +197,8 @@ def unmask(text: str, tokens: list[str]) -> str:
         token = tokens[int(match[1])]
         if token.startswith("{#"):
             return " " + token
-        # Japanese letters are valid citation-key characters to Pandoc.
-        # Whitespace prevents an adjacent Japanese word from extending the ID.
+        # CJK letters are valid citation-key characters to Pandoc.
+        # Whitespace prevents an adjacent CJK word from extending the ID.
         return " " + token + " " if token.startswith("@") else token
 
     return PLACEHOLDER.sub(restore, text)

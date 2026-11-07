@@ -1,71 +1,86 @@
 {
   "schema_version": 1,
   "upstream": {
-    "remote": "upstream",
-    "url": "https://github.com/carpentries-incubator/bioc-intro.git",
     "ref": "upstream/main",
     "revision": "e298f2befb10a4a45b5a0b3f4732558a824ab1fb",
+    "remote": "upstream",
+    "url": "https://github.com/carpentries-incubator/bioc-intro.git",
     "episodes_directory": "episodes"
   },
   "model": {
     "id": "pfnet/plamo-3-translate-8b-MLX-4bit",
     "revision": "9d87684408bdf34500b7d6115c257d83350c1fe5",
     "source_language": "en",
-    "target_language": "ja",
-    "form": "polite",
+    "target_language": "zh-hans",
+    "form": null,
     "temperature": 0
   },
   "files_relative_to": "episodes",
   "files": {
     "10-data-organisation.Rmd": {
       "source_sha256": "bcef1e2e788bf61f61e3fece854fa1d236bbc32e59d4bdc92e64ba8f9a9ff5bd",
-      "translated_sha256": "fc5e2cd321e8f3e8016e5d3c84afdf9051e02b3b28d500a19a97641b53080389",
-      "prose_units": 221,
-      "comment_units": 4
+      "translated_sha256": "e8bfa7fbd3ff882b071e37e03c00bc7e1620aaf94ab2149fad46e101e6c17ce1",
+      "build_patches": [],
+      "comment_units": 4,
+      "prose_units": 221
     },
     "20-r-rstudio.Rmd": {
       "source_sha256": "78ae9f31c5cf3c178565dcafaeddb50e71a851fc72e5eff3da1a75c1b3af600d",
-      "translated_sha256": "b967cd459b4981de59ddebd886309d883881d3bca9f5948372ba35e337e568e4",
-      "prose_units": 136,
-      "comment_units": 0
+      "translated_sha256": "bb3b55ed3bedfb1fd495cbe66ce248c412eb5758b5068a119920a65f1aa90929",
+      "build_patches": [],
+      "comment_units": 0,
+      "prose_units": 136
     },
     "23-starting-with-r.Rmd": {
       "source_sha256": "b93ae38b61df468b2ce58cb48582ffe42e434b3eef4c59dd23e07add5b5fd306",
-      "translated_sha256": "5e2e6ce2bee2e0049f9b216ff6ab15a771446d8247f10d476f96bc8d59a635be",
-      "prose_units": 143,
-      "comment_units": 0
+      "translated_sha256": "618e1e15d618ff04d7a7786f71f5e1359c020f1ddf20db19ac6df835488d1867",
+      "build_patches": [],
+      "comment_units": 0,
+      "prose_units": 143
     },
     "25-starting-with-data.Rmd": {
       "source_sha256": "7a5b1d25d7ca28b5c2ff0b1eb5bb96339ab37d27bb81f15e13fe32555fb7328e",
-      "translated_sha256": "4c764e2354a1b37f1b93241c12c073623af12103a3d67afb0d4676505f248a7d",
-      "prose_units": 149,
-      "comment_units": 6
+      "translated_sha256": "8615f2155fee4aa2df41d77abd1dd9b6b1d870d0cdc64d643afb8741146e284d",
+      "build_patches": [
+        "data-frame-heading-id",
+        "vector-generation-link"
+      ],
+      "comment_units": 6,
+      "prose_units": 149
     },
     "30-dplyr.Rmd": {
       "source_sha256": "5c323e484cb48262574459e23a868bf42c5e7c37730deaa2b160afdfc925ad03",
-      "translated_sha256": "d973597067755af357ac473c5108494eb9352dbf8aa836a5ebc29d66b842d47b",
-      "prose_units": 168,
-      "comment_units": 1
+      "translated_sha256": "d195f20e77d2b12705fdb5258d730d1657cce9e6ba498a682b78686114382b01",
+      "build_patches": [],
+      "comment_units": 1,
+      "prose_units": 168
     },
     "40-visualization.Rmd": {
       "source_sha256": "329007bcb72ff9176b37a6c4311f08de47651263cb7c1b39748041ac94c48090",
-      "translated_sha256": "fd5c0afca5196981a7cac9ef31a25809c54b6bf0c5fcca6b2b94c77698309e65",
-      "prose_units": 138,
-      "comment_units": 0
+      "translated_sha256": "6b854b9cf27cd7795b6cb81f33d11f6033d842693a25332789d284a8a526a583",
+      "build_patches": [
+        "theme-object-call",
+        "painter-model-link"
+      ],
+      "comment_units": 0,
+      "prose_units": 138
     },
     "60-next-steps.Rmd": {
       "source_sha256": "0a506ddaa815eeec39a4e48746743f3d84bb1a099145dd1598132ed7a354e051",
-      "translated_sha256": "a3978f32aa2a8eefefc8a381d6691c11a4c76f05880fe904bb3dcc374cb7f6ca",
-      "prose_units": 70,
-      "comment_units": 1
+      "translated_sha256": "70c937a20c034a1c20e763d4ac925630e72c8715c368c885f49d166d729a60e3",
+      "build_patches": [],
+      "comment_units": 1,
+      "prose_units": 70
     }
   },
-  "reviewed_seed_records": 945,
+  "reviewed_seed_records": 27,
   "reviewed_context_records": 29,
   "build_patches": [
     "data-frame-heading-id",
     "vector-generation-link",
     "theme-object-call",
     "painter-model-link"
-  ]
+  ],
+  "machine_seed_records": 918,
+  "translation_memory_records": 945
 }

@@ -1,19 +1,19 @@
 [
   {
     "source": "data frame",
-    "target": "データフレーム"
+    "target": "数据框"
   },
   {
     "source": "data frames",
-    "target": "データフレーム"
+    "target": "数据框"
   },
   {
     "source": "vector",
-    "target": "ベクトル"
+    "target": "向量"
   },
   {
     "source": "vectors",
-    "target": "ベクトル"
+    "target": "向量"
   },
   {
     "source": "factor",
@@ -25,55 +25,55 @@
   },
   {
     "source": "atomic vector",
-    "target": "アトミックベクトル"
+    "target": "原子向量"
   },
   {
     "source": "atomic vectors",
-    "target": "アトミックベクトル"
+    "target": "原子向量"
   },
   {
     "source": "tidy data",
-    "target": "整然データ"
+    "target": "整洁数据"
   },
   {
     "source": "gene expression",
-    "target": "遺伝子発現"
+    "target": "基因表达"
   },
   {
     "source": "spreadsheet",
-    "target": "スプレッドシート"
+    "target": "电子表格"
   },
   {
     "source": "spreadsheets",
-    "target": "スプレッドシート"
+    "target": "电子表格"
   },
   {
     "source": "working directory",
-    "target": "作業ディレクトリ"
+    "target": "工作目录"
   },
   {
     "source": "data wrangling",
-    "target": "データ加工"
+    "target": "数据整理"
   },
   {
     "source": "wide format",
-    "target": "ワイド形式"
+    "target": "宽格式"
   },
   {
     "source": "long format",
-    "target": "ロング形式"
+    "target": "长格式"
   },
   {
     "source": "wider and longer formats",
-    "target": "ワイド形式とロング形式"
+    "target": "宽格式和长格式"
   },
   {
     "source": "non-optional arguments",
-    "target": "必須の引数"
+    "target": "必需参数"
   },
   {
     "source": "log2 transformation",
-    "target": "底が2の対数変換"
+    "target": "以2为底的对数变换"
   },
   {
     "source": "abnormal DNA methylation",

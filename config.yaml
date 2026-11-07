@@ -11,10 +11,10 @@
 carpentry: 'incubator'
 
 # Language for navigation and lesson labels.
-lang: 'ja'
+lang: 'zh-hans'
 
 # Overall title for pages.
-title: 'Introduction to data analysis with R and Bioconductor'
+title: '使用 R 和 Bioconductor 进行数据分析入门'
 
 # Date the lesson was created (YYYY-MM-DD, this is empty by default)
 created: '2020-09-14'
@@ -30,7 +30,7 @@ life_cycle: 'stable'
 license: 'CC-BY 4.0'
 
 # Link to the source repository for this lesson
-source: 'https://github.com/bioconductor-translations/bioc-intro-plamo3translate-ja'
+source: 'https://github.com/bioconductor-translations/bioc-intro-plamo3translate-zh-hans'
 
 # Default branch of your lesson
 branch: 'main'
@@ -85,4 +85,4 @@ profiles:
 # sandpaper and varnish versions) should live
 
 
-url: 'https://bioconductor-translations.github.io/bioc-intro-plamo3translate-ja'
+url: 'https://bioconductor-translations.github.io/bioc-intro-plamo3translate-zh-hans'

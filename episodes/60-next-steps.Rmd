@@ -1,6 +1,6 @@
 ---
 source: Rmd
-title: "次のステップ"
+title: "后续步骤"
 teaching: 45
 exercises: 45
 ---
@@ -10,56 +10,56 @@ exercises: 45
 
 ::::::::::::::::::::::::::::::::::::::: objectives
 
-- Bioconductorプロジェクトについて紹介します。
-- データコンテナの概念を紹介します。
-- オミクス解析で広く用いられる`SummarizedExperiment`の概要を説明してください。
+- 介绍 Bioconductor 项目。
+- 介绍数据容器的概念。
+- 概述在组学分析中广泛使用的 `SummarizedExperiment`。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::: questions
 
-- `SummarizedExperiment`とは何ですか？
-- Bioconductorとは何ですか？
+- 什么是 `SummarizedExperiment`？
+- 什么是 Bioconductor？
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-## 次のステップ
+## 后续步骤
 
 ```{r, echo=FALSE, message=FALSE}
 library("tidyverse")
 ```
 
-バイオインフォマティクスにおけるデータは、複雑な場合が多くあります。これに対処するため、開発者は扱う必要のあるデータの特性に合わせた専用のデータコンテナ（クラスと呼ばれます）を定義します。
+生物信息学中的数据通常较为复杂。为了应对这一问题，开发者定义了专门的数据容器（称为类），以匹配他们需要处理的数据属性。
 
-この側面は、パッケージ間で共通の**コアデータ基盤**を採用している**Bioconductor**[^Bioconductor]プロジェクトの中核をなすものです。これは間違いなくBioconductorの成功に寄与しました。Bioconductorのパッケージ開発者は、プロジェクト全体に一貫性、相互運用性、および安定性をもたらすため、既存の基盤を活用することが推奨されています。
+这一方面是 **Bioconductor**[^Bioconductor] 项目的核心，该项目在各个包中使用相同的 **核心数据基础设施**。这无疑促成了 Bioconductor 的成功。Bioconductor 包开发者建议利用现有基础设施，以确保整个项目的一致性、互操作性和稳定性。
 
-[^Bioconductor]: [Bioconductor](https://www.bioconductor.org)は、R言語の2人の創始者の一人であるロバート・ジェントルマンによって立ち上げられました。Bioconductorは、オミクスデータ解析に特化したツールを提供しています。Bioconductorは統計プログラミング言語Rを採用しており、オープンソースかつオープンな開発体制となっています。
+[^Bioconductor]: [Bioconductor](https://www.bioconductor.org) 由 R 语言的两位创始人之一 Robert Gentleman 发起。Bioconductor 提供专门用于组学数据分析的工具。Bioconductor 使用 R 统计编程语言，且采用开源和开放开发模式。
 
-このようなオミクスデータコンテナの例として、`SummarizedExperiment`クラスを紹介します。
+为了演示这类组学数据容器，我们将介绍 `SummarizedExperiment` 类。
 
 ## SummarizedExperiment
 
-下図は、SummarizedExperimentクラスの構成を示しています。
+下图展示了 SummarizedExperiment 类的结构。
 
 ```{r SE, echo=FALSE, out.width="80%", fig.alt="Schematic representation of the SummarizedExperiment class illustrating the following slots: fowData and rowRanges, one assay or multiple assays, colData and metadata."}
 knitr::include_graphics("https://uclouvain-cbio.github.io/WSBIM1322/figs/SE.svg")
 ```
 
-SummarizedExperimentクラスのオブジェクトには、以下が含まれます。
+SummarizedExperiment 类的对象包含：
 
-- 行列形式のオブジェクトとして格納された定量的なオミクスデータ（発現データ）を含む**1つ（または複数）のアッセイ**です。行方向に特徴量（遺伝子、転写産物、タンパク質など）が、列方向にサンプルが定義されています。
+- **一个（或多个）测定**，包含定量组学数据（表达数据），以矩阵类对象形式存储。特征（基因、转录本、蛋白质……）沿行定义，样本沿列定义。
 
-- サンプルの共変量を格納した**サンプルメタデータ**スロットです。データフレームとして保存されています。このテーブルの行はサンプルを表します（行は発現データの列と完全に一致します）。
+- 一个包含样本协变量的 **样本元数据** 槽，以数据框形式存储。该表的行代表样本（行与表达数据的列完全匹配）。
 
-- 特徴量の共変量を格納した**特徴量メタデータ**スロットです。データフレームとして保存されています。このデータフレームの行は、発現データの行と完全に一致します。
+- 一个包含特征协变量的**特征元数据**槽，以数据框形式存储。该数据框的行与表达数据的行完全一致。
 
-`SummarizedExperiment`の整合性により、データ操作時に異なるスロットの次元が常に一致することが保証されます（すなわち、発現データの列とサンプルメタデータの行、および発現データの行と特徴量メタデータの行が一致します）。例えば、アッセイから1つのサンプルを除外する場合、同一の操作によってサンプルメタデータからも自動的に削除されます。
+`SummarizedExperiment` 的协调特性保证了在数据处理过程中，不同槽的维度始终保持一致（即表达数据中的列与样本元数据中的行，以及表达数据中的行与特征元数据中的行）。例如，如果我们需要从测定中剔除一个样本，该样本将在同一操作中自动从样本元数据中移除。
 
-メタデータスロットには、他の構造に影響を与えることなく、追加の共変量（列）を加えることができます。
+元数据槽可以增加额外的协变量（列），而不会影响其他结构。
 
-### SummarizedExperimentの作成
+### 创建 SummarizedExperiment
 
-`SummarizedExperiment`を作成するため、個々の構成要素、すなわちカウント行列、サンプルおよび遺伝子のメタデータをCSVファイルから作成します。これらは通常、RNA-Seqデータ（生データの処理後）の提供形式となっています。
+为了创建 `SummarizedExperiment`，我们将从 CSV 文件中创建各个组成部分，即计数矩阵、样本和基因元数据。这通常是 RNA-Seq 数据的提供方式（在原始数据经过处理之后）。
 
 ```{r, echo=FALSE, message=FALSE}
 rna <- read_csv("data/rnaseq.csv")
@@ -98,7 +98,7 @@ write.csv(gene_metadata, file = "data/gene_metadata.csv", row.names = FALSE)
 write.csv(sample_metadata, file = "data/sample_metadata.csv", row.names = FALSE)
 ```
 
-- **発現行列**：カウント行列を読み込み、最初の列に行名／遺伝子名が含まれていることを指定して、`data.frame`を`matrix`に変換します。[こちらのリンク](https://carpentries-incubator.github.io/bioc-intro/data/count_matrix.csv)からダウンロードいただけます。
+- **表达矩阵**：我们加载计数矩阵，并指定第一列包含行/基因名称，然后将 `data.frame` 转换为 `matrix`。您可以[点击此链接](https://carpentries-incubator.github.io/bioc-intro/data/count_matrix.csv)下载。
 
 ```{r}
 count_matrix <- read.csv("data/count_matrix.csv",
@@ -109,7 +109,7 @@ count_matrix[1:5, ]
 dim(count_matrix)
 ```
 
-- **サンプルの説明表**は、[こちらのリンク](https://carpentries-incubator.github.io/bioc-intro/data/sample_metadata.csv)からご覧いただけます。
+- **描述样本的表格**，可在[此链接](https://carpentries-incubator.github.io/bioc-intro/data/sample_metadata.csv)获取。
 
 ```{r}
 sample_metadata <- read.csv("data/sample_metadata.csv")
@@ -117,7 +117,7 @@ sample_metadata
 dim(sample_metadata)
 ```
 
-- **遺伝子に関する表**は、[こちらのリンク](https://carpentries-incubator.github.io/bioc-intro/data/gene_metadata.csv)からご覧いただけます。
+- **描述基因的表格**，可在[此链接](https://carpentries-incubator.github.io/bioc-intro/data/gene_metadata.csv)获取。
 
 ```{r}
 gene_metadata <- read.csv("data/gene_metadata.csv")
@@ -125,22 +125,22 @@ gene_metadata[1:10, 1:4]
 dim(gene_metadata)
 ```
 
-これらのテーブルから`SummarizedExperiment`を作成します。
+我们将根据这些表格创建一个 `SummarizedExperiment`：
 
-- **`assay`**として使用されるカウント行列
+- 将用作 **`assay`** 的计数矩阵
 
-- サンプルを記述した表は、**サンプルメタデータ**スロットとして使用されます。
+- 描述样本的表将用作 **样本元数据** 槽
 
-- 遺伝子を記述したテーブルは、**features metadata**スロットとして使用されます。
+- 描述基因的表将用作 **特征元数据** 槽
 
-これを行うには、`SummarizedExperiment` コンストラクタを用いて各パーツを組み合わせることができます。
+为此，我们可以使用 `SummarizedExperiment` 构造函数将不同的部分组合在一起：
 
 ```{r, message=FALSE, warning=FALSE}
 ## BiocManager::install("SummarizedExperiment")
 library("SummarizedExperiment")
 ```
 
-まず、カウント行列とサンプルアノテーションにおいてサンプルの順序が一致していること、およびカウント行列と遺伝子アノテーションにおいて遺伝子の順序が一致していることを確認します。
+首先，我们确保计数矩阵和样本注释中的样本顺序一致，且计数矩阵和基因注释中的基因顺序也一致。
 
 ```{r}
 stopifnot(rownames(count_matrix) == gene_metadata$gene)
@@ -154,11 +154,11 @@ se <- SummarizedExperiment(assays = list(counts = count_matrix),
 se
 ```
 
-### データの保存
+### 保存数据
 
-前回のエピソードで行ったようなスプレッドシートへのデータエクスポートには、第1章で述べた点（小数点区切り文字に関する`,`と`.`の不整合の可能性や、変数型の定義がないことなど）など、いくつかの制約があります。さらに、スプレッドシートへのデータエクスポートが有効なのは、データフレームや行列のような矩形データに限られます。
+将数据导出到电子表格（如我们在之前的章节中所做的那样）存在若干局限性，例如第一章中所述的问题（小数点分隔符可能与 `,` 和 `.` 不一致，且缺乏变量类型定义）。此外，将数据导出到电子表格仅适用于数据框和矩阵等矩形数据。
 
-R特有の、いかなるオペレーティングシステムでも確実に動作するより汎用的なデータ保存方法は、`saveRDS`関数を使用することです。このようにオブジェクトを保存すると、ディスク上にバイナリ形式のデータ（ここでは`rds`というファイル拡張子を使用）が生成され、これを`readRDS`関数を用いてRに読み込むことができます。
+一种更通用的数据保存方式是使用 `saveRDS` 函数，该方法专用于 R，且保证在任何操作系统上均能正常运行。这样保存对象将在磁盘上生成二进制表示（此处使用 `rds` 文件扩展名），随后可以使用 `readRDS` 函数将其重新加载到 R 中。
 
 ```{r, eval=FALSE}
 saveRDS(se, file = "data_output/se.rds")
@@ -167,34 +167,34 @@ se <- readRDS("data_output/se.rds")
 head(se)
 ```
 
-まとめとして、Rで保存し、再度Rで読み込むデータについては、`saveRDS`および`readRDS`を用いて保存・読み込みを行う方法が推奨されます。表形式のデータをRを使用していない相手と共有する必要がある場合は、テキストベースのスプレッドシートにエクスポートすることも有効な選択肢となります。
+总之，对于需要在 R 中保存并再次加载的数据，使用 `saveRDS` 和 `readRDS` 进行保存和加载是首选方法。如果需要与不使用 R 的人员共享表格数据，则导出为基于文本的电子表格是一个不错的替代方案。
 
-このデータ構造を用いることで、`assay`関数で発現行列にアクセスできます。
+利用这种数据结构，我们可以使用 `assay` 函数访问表达矩阵：
 
 ```{r}
 head(assay(se))
 dim(assay(se))
 ```
 
-`colData`関数を使用して、サンプルのメタデータにアクセスできます。
+我们可以使用 `colData` 函数访问样本元数据：
 
 ```{r}
 colData(se)
 dim(colData(se))
 ```
 
-また、`rowData`関数を使用してフィーチャーのメタデータにアクセスすることもできます。
+我们还可以使用 `rowData` 函数访问特征元数据：
 
 ```{r}
 head(rowData(se))
 dim(rowData(se))
 ```
 
-### SummarizedExperimentのサブセット抽出
+### 对 SummarizedExperiment 进行子集操作
 
-SummarizedExperimentは、データフレームと同様に、数値、文字、または論理値を用いてサブセットを抽出できます。
+SummarizedExperiment 可以像数据框一样，使用数值、字符或逻辑向量进行子集提取。
 
-以下では、最初の3つのサンプルの最初の5つの特徴量のみを含むSummarizedExperimentクラスの新しいインスタンスを作成します。
+下面，我们创建一个 SummarizedExperiment 类的新实例，其中仅包含前 3 个样本的前 5 个特征。
 
 ```{r}
 se1 <- se[1:5, 1:3]
@@ -206,7 +206,7 @@ colData(se1)
 rowData(se1)
 ```
 
-また、`colData()`関数を用いてサンプルメタデータから、`rowData()`関数を用いてフィーチャーメタデータから、それぞれ条件を指定してサブセットを抽出することもできます。例えば、ここではmiRNAと非感染サンプルのみを残します：
+我们还可以使用 `colData()` 函数根据样本元数据进行筛选，或使用 `rowData()` 函数根据特征元数据进行筛选。例如，这里我们仅保留 miRNA 和未感染样本：
 
 ```{r}
 se1 <- se[rowData(se)$gene_biotype == "miRNA",
@@ -217,9 +217,9 @@ colData(se1)
 rowData(se1)
 ```
 
-<!--次の演習では、SE.rdaオブジェクト（`se`オ
-ブジェクトを含む）をダウンロードし、
-'load()'関数を使ってファイルを開いてください。-->
+<!--在接下来的练习中，您应该下载 SE.
+rda 对象（其中包含 `se` 对象），并使用
+'load()' 函数打开该文件。-->
 
 <!-- ```{r, eval = FALSE, echo = FALSE} -->
 
@@ -233,13 +233,13 @@ rowData(se1)
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## 課題
+## 挑战
 
-時刻0および時刻8におけるサンプルの先頭3つの遺伝子の発現量を抽出してください。
+提取时间点 0 和时间点 8 中前3个基因的基因表达水平。
 
 :::::::::::::::  solution
 
-## 解答
+## 解决方案
 
 ```{r, purl=FALSE}
 assay(se)[1:3, colData(se)$time != 4]
@@ -254,13 +254,13 @@ assay(se)[1:3, colData(se)$time == 0 | colData(se)$time == 8]
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## 課題
+## 挑战
 
-ロング形式の`rna`テーブルを使用して、同じ値が得られることを確認してください。
+验证使用长格式 `rna` 表格是否能得到相同的值。
 
 :::::::::::::::  solution
 
-## 解答
+## 解决方案
 
 ```{r, purl=FALSE}
 rna |>
@@ -273,30 +273,30 @@ rna |>
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-ロングテーブルと`SummarizedExperiment`は同じ情報を含んでいますが、単に構造が異なるだけです。それぞれの手法に利点があります。前者は`tidyverse`パッケージに適しており、後者は多くのバイオインフォマティクスや統計処理の手順において好まれる構造です。例えば、`DESeq2`パッケージを用いた典型的なRNA-Seq解析などが挙げられます。
+长表和 `SummarizedExperiment` 包含相同的信息，但结构有所不同。两种方法各有优势：前者适用于 `tidyverse` 包，而后者则是许多生物信息学和统计处理步骤的首选结构。例如，使用 `DESeq2` 包进行的典型 RNA-Seq 分析。
 
-#### メタデータへの変数の追加
+#### 向元数据添加变量
 
-メタデータに情報を追加することもできます。例えば、サンプルを採取した場所を追加したいとしましょう...
+我们还可以向元数据中添加信息。假设你想添加样本采集中心的信息……
 
 ```{r}
 colData(se)$center <- rep("University of Illinois", nrow(colData(se)))
 colData(se)
 ```
 
-これは、メタデータスロットが他の構造に影響を与えることなく、無制限に拡張できることを示しています！
+这说明了元数据槽可以无限扩展，而不会影响其他结构！
 
 ### tidySummarizedExperiment
 
-tidyverseのコマンドを使って`SummarizedExperiment`オブジェクトを操作できるのか、疑問に思われるかもしれません。答えは「はい」です。`tidySummarizedExperiment`パッケージを使えば可能です。
+您可能会好奇，是否可以使用 tidyverse 命令来操作 `SummarizedExperiment` 对象？答案是肯定的，我们可以使用 `tidySummarizedExperiment` 包来实现。
 
-SummarizedExperimentオブジェクトがどのような見た目だったか、思い出してください。
+请回顾一下我们的 SummarizedExperiment 对象是什么样子的：
 
 ```{r, message=FALSE}
 se
 ```
 
-`tidySummarizedExperiment`を読み込み、改めてseオブジェクトを確認してください。
+加载 `tidySummarizedExperiment`，然后再次查看 se 对象。
 
 ```{r, message=FALSE}
 ## BiocManager::install("tidySummarizedExperiment")
@@ -305,30 +305,30 @@ library("tidySummarizedExperiment")
 se
 ```
 
-依然として`SummarizedExperiment`オブジェクトであるため、効率的な構造が維持されていますが、現在はtibbleとして扱うことができます。出力の1行目にそう記載されている点に注目してください。これは`SummarizedExperiment`\-`tibble`という抽象化です。また、出力の2行目で転写産物数とサンプル数を確認できます。
+它仍然是一个 `SummarizedExperiment` 对象，因此保留了高效的结构，但现在我们可以将其视为一个 tibble。请注意，输出的第一行指出这是一个 `SummarizedExperiment`\-`tibble` 抽象。我们还可以在输出的第二行看到转录本和样本的数量。
 
-これで、tidyverseのコマンドを使って`SummarizedExperiment`オブジェクトを操作できるようになりました。
+现在我们可以使用 tidyverse 命令来操作 `SummarizedExperiment` 对象了。
 
-`filter` を使用して、条件に基づいて行をフィルタリングできます。例えば、あるサンプルのすべての行を表示する場合などです。
+我们可以使用 `filter` 根据条件筛选行，例如查看某个样本的所有行。
 
 ```{r}
 se |> filter(sample == "GSM2545336")
 se |> filter(sex == "Female")
 ```
 
-`select` を使用して、表示したい列を指定できます。
+我们可以使用 `select` 来指定想要查看的列。
 
 ```{r}
 se |> select(sample, sex)
 ```
 
-`mutate` を使用してメタデータ情報を追加できます。
+我们可以使用 `mutate` 来添加元数据信息。
 
 ```{r}
 se |> mutate(center = "Heidelberg University")
 ```
 
-また、tidyverseのパイプ `|>` を使ってコマンドを組み合わせることもできます。例えば、`group_by` と `summarise` を組み合わせることで、各サンプルの合計カウントを取得できます。
+我们还可以使用 tidyverse 管道 `|>` 来组合命令。例如，我们可以将 `group_by` 和 `summarise` 组合起来，以获取每个样本的总计数。
 
 ```{r}
 se |>
@@ -336,9 +336,9 @@ se |>
     summarise(total_counts=sum(counts))
 ```
 
-整然データのSummarizedExperimentオブジェクトは、プロット用に通常のtibbleとして扱うことができます。
+我们可以将 tidy SummarizedExperiment 对象视为一个普通的 tibble 进行绘图。
 
-ここでは、サンプルごとのカウント数の分布をプロットします。
+这里我们绘制每个样本的计数分布。
 
 ```{r tidySE-plot, fig.alt="Density plot showing log of expression counts + 1 density lines, one per samples, coloured based on the infection status."}
 se |>
@@ -348,19 +348,19 @@ se |>
     theme_bw()
 ```
 
-`tidySummarizedExperiment`の詳細については、[パッケージのウェブサイト](https://stemangiola.github.io/tidySummarizedExperiment/)をご覧ください。
+有关 `tidySummarizedExperiment` 的更多信息，请参阅 [包网站](https://stemangiola.github.io/tidySummarizedExperiment/)。
 
-**要点**
+**核心要点**
 
-- `SummarizedExperiment`は、オミクスデータを保存・扱うための効率的な手法です。
+- `SummarizedExperiment` 是一种高效的组学数据存储与处理方式。
 
-- これらは多くのBioconductorパッケージで使用されています。
+- 它们被广泛应用于许多 Bioconductor 包中。
 
-次に予定されているRNAシーケンシング解析のトレーニングでは、Bioconductorの`DESeq2`パッケージを使用して、発現変動解析を行う方法を学びます。`DESeq2`パッケージを用いた解析全体は、`SummarizedExperiment`で行われます。
+如果您参加接下来的专注于 RNA 测序分析的培训，您将学习如何使用 Bioconductor `DESeq2` 包进行一些差异表达分析。`DESeq2` 包的整个分析过程都在 `SummarizedExperiment` 中处理。
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
 
-- Bioconductorは、ハイスループット生物学データの解析を支援するためのサポートやパッケージを提供するプロジェクトです。
-- `SummarizedExperiment`は、ハイスループットなオミクスデータを保存・管理する際に有用なオブジェクトの一種です。
+- Bioconductor 是一个为理解高通量生物学数据提供支持和软件包的项目。
+- `SummarizedExperiment` 是一种用于存储和管理高通量组学数据的对象类型。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::

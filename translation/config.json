@@ -4,8 +4,8 @@
     "id": "pfnet/plamo-3-translate-8b-MLX-4bit",
     "revision": "9d87684408bdf34500b7d6115c257d83350c1fe5",
     "source_language": "en",
-    "target_language": "ja",
-    "form": "polite",
+    "target_language": "zh-hans",
+    "form": null,
     "temperature": 0
   },
   "upstream": {"remote": "upstream", "branch": "main", "ref": "upstream/main"},
@@ -14,7 +14,7 @@
   "contexts": "reviewed-context.json",
   "patches": "patches.json",
   "manifest": "source-manifest.json",
-  "context": "An introductory R and Bioconductor lesson for life scientists. Retain Markdown formatting and XML placeholders exactly. Each placeholder occurs once. R function names and dataset identifiers remain literal.",
+  "context": "An introductory R and Bioconductor lesson for life scientists. Retain Markdown formatting and XML placeholders exactly. Each placeholder occurs once. R function names and dataset identifiers remain literal. Write natural Simplified Chinese for learners, using established Chinese R and bioinformatics terminology.",
   "mouse_dataset_files": [
     "25-starting-with-data.Rmd", "30-dplyr.Rmd",
     "40-visualization.Rmd", "60-next-steps.Rmd"

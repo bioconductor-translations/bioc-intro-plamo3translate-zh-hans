@@ -207,10 +207,11 @@ Repository-level variables for this workflow are:
   - If OMIT_PR_CONTAINER_VERSION_UPDATE is `true` this option does nothing
   - To auto-merge this PR, set this to `true`
   - Default is unset or `false`
-- LANG_CODE
-  - Two-letter language code that triggers the use of Joel Nitta's {dovetail} package for lesson translation
-  - This is used in the internationalisation repos of the main Carpentry lesson programs
-  - Default is unset or `''`
+
+This fork builds the translated lessons already committed in `episodes/` using
+`scripts/ci-build.R`. It shares the local build's Simplified Chinese interface,
+citation processing, and icons. `LANG_CODE` and the separate dovetail translation
+branch are not used; the lesson and model language settings use `zh-hans`.
 
 ### 02 Maintain: Check for Updated Packages (update-cache.yaml)
 

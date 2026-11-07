@@ -67,7 +67,7 @@
       "glossary": [
         {
           "source": "3 first genes",
-          "target": "先頭3つの遺伝子"
+          "target": "前3个基因"
         }
       ]
     },
@@ -95,7 +95,7 @@
       "files": [
         "60-next-steps.Rmd"
       ],
-      "context": "Long table means a data table in long format (ロング形式), as opposed to a wide-format table, not physical length.",
+      "context": "Long table means a data table in long format (长格式), as opposed to a wide-format table, not physical length.",
       "glossary": []
     },
     "628f0244e3b5e47977e87ca04f09885d28d990b1e6d377f6da7c706e28bb5e73": {
@@ -108,7 +108,7 @@
       "glossary": [
         {
           "source": "are sorted along the columns",
-          "target": "列方向に配置されます"
+          "target": "按列依次填充"
         }
       ]
     },
@@ -122,7 +122,7 @@
       "glossary": [
         {
           "source": "don't add up",
-          "target": "整合しない"
+          "target": "不匹配"
         }
       ]
     },
@@ -132,7 +132,7 @@
       "files": [
         "40-visualization.Rmd"
       ],
-      "context": "Each of the three XML placeholders must occur once only. The two library names may be mentioned together once, then referred to as これら in later clauses. This paragraph compares base R graphics with graphics libraries that return updateable plot objects.",
+      "context": "Each of the three XML placeholders must occur once only. The two library names may be mentioned together once, then referred to as 这些库 in later clauses. This paragraph compares base R graphics with graphics libraries that return updateable plot objects.",
       "glossary": []
     },
     "6b8335c460072c5ec2a2b0bafcb1042338664c9d2c47f3ed49a8000ee7d4df94": {
@@ -141,7 +141,7 @@
       "files": [
         "40-visualization.Rmd"
       ],
-      "context": "This paragraph requires a log2 transformation of expression values, explicitly a logarithm with base 2 (底が2の対数変換), before plotting.",
+      "context": "This paragraph requires a log2 transformation of expression values, explicitly a logarithm with base 2 (以2为底的对数变换), before plotting.",
       "glossary": []
     },
     "6cc43121fdbde12af5a715415b59349a20c271af8c8d55d5b8293163b8c1a032": {
@@ -163,11 +163,11 @@
       "glossary": [
         {
           "source": "technology won't exist (or will become sufficiently rare)",
-          "target": "そのファイルを開くための技術が存在しなくなる（または非常にまれになる）"
+          "target": "用于打开该文件的技术将不复存在（或变得十分罕见）"
         },
         {
           "source": "to make it inconvenient, if not impossible, to open the file",
-          "target": "その結果、ファイルを開くことが不可能になったり、少なくとも不便になったりする"
+          "target": "从而导致文件难以打开，甚至无法打开"
         }
       ]
     },
@@ -177,7 +177,7 @@
       "files": [
         "23-starting-with-r.Rmd"
       ],
-      "context": "Atomic vector is an R technical term: アトミックベクトル. It is a homogeneous vector containing one data type. Use this established technical term.",
+      "context": "Atomic vector is an R technical term: 原子向量. It is a homogeneous vector containing one data type. Use this established technical term.",
       "glossary": []
     },
     "a4bf89289fd4093d0c2af79f852dd2430aeef3b2aa100f794db4ff04328e565d": {
@@ -186,11 +186,11 @@
       "files": [
         "23-starting-with-r.Rmd"
       ],
-      "context": "Each of the four XML placeholders must occur once only. After comparing the two named strings, use Japanese pronouns 前者 and 後者 in the conclusion, rather than repeating their placeholders. The text is about alphabetical string comparison with R operators.",
+      "context": "Each of the four XML placeholders must occur once only. After comparing the two named strings, use Simplified Chinese pronouns 前者 and 后者 in the conclusion, rather than repeating their placeholders. The text is about alphabetical string comparison with R operators.",
       "glossary": [
         {
           "source": "Here <x2/> comes after <x3/>, and therefore is *greater than* it.",
-          "target": "ここでは <x2/> が <x3/> の後に来るため、前者の方が後者よりも*大きい*と判断されます。"
+          "target": "这里，<x2/> 排在 <x3/> 之后，因此前者比后者*大*。"
         }
       ]
     },
@@ -200,7 +200,7 @@
       "files": [
         "30-dplyr.Rmd"
       ],
-      "context": "These are two distinct formats for a table: the wide format and the long format, known in Japanese as ワイド形式 and ロング形式. The paragraph contrasts the two formats.",
+      "context": "These are two distinct formats for a table: the wide format and the long format, known in Simplified Chinese as 宽格式 and 长格式. The paragraph contrasts the two formats.",
       "glossary": []
     },
     "b937afa88682af07ca0442461cec9b5b03fdaaf645003249c555656ce3857026": {
@@ -209,7 +209,7 @@
       "files": [
         "30-dplyr.Rmd"
       ],
-      "context": "The dataset consists of male and female mice (雄 and 雌). X and Y linked genes means genes located on the X and Y chromosomes.",
+      "context": "The dataset consists of male and female mice (雄性 and 雌性). X and Y linked genes means genes located on the X and Y chromosomes.",
       "glossary": []
     },
     "bf99be52aae5b144c69fc56067e32917233fce5c93f41c79e50fb5e18a319911": {
@@ -227,7 +227,7 @@
       "files": [
         "30-dplyr.Rmd"
       ],
-      "context": "The phrase abnormal DNA methylation is an exact literal value stored in the phenotype_description column and must remain in English for the filtering exercise. It may be followed by a Japanese explanation.",
+      "context": "The phrase abnormal DNA methylation is an exact literal value stored in the phenotype_description column and must remain in English for the filtering exercise. It may be followed by a Simplified Chinese explanation.",
       "glossary": []
     },
     "ce6bee49722758a162522ef3a0b8b651099bc0cb33fbf9780ea1bd0c443245c2": {
@@ -236,7 +236,7 @@
       "files": [
         "23-starting-with-r.Rmd"
       ],
-      "context": "Atomic vector is an R technical term, アトミックベクトル. An atomic vector holds elements of a single data type, unlike a list.",
+      "context": "Atomic vector is an R technical term, 原子向量. An atomic vector holds elements of a single data type, unlike a list.",
       "glossary": []
     },
     "ddd8354f0f5a3b95874705866b5c2426e34825d9b7e4370c831329f5de090888": {
@@ -245,7 +245,7 @@
       "files": [
         "23-starting-with-r.Rmd"
       ],
-      "context": "Non-optional arguments are required or mandatory arguments (必須の引数) that must be supplied to an R function.",
+      "context": "Non-optional arguments are required or mandatory arguments (必需参数) that must be supplied to an R function.",
       "glossary": []
     },
     "e2f9e402c2c52c6bad37e4e3974b3d18ad2987a182fcb4d932cb42d5c4714af5": {
@@ -267,7 +267,7 @@
       "glossary": [
         {
           "source": "This will limit the ways in which you can analyse your data.",
-          "target": "1つのセルに複数の情報を入れると、データの分析方法が制限されてしまいます。"
+          "target": "在一个单元格中存储多条信息会限制数据的分析方式。"
         }
       ]
     },
@@ -290,7 +290,7 @@
       "glossary": [
         {
           "source": "Mutate",
-          "target": "列の作成・変更（mutate）"
+          "target": "创建和修改列（mutate）"
         }
       ]
     },

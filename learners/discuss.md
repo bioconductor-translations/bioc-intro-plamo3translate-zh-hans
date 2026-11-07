@@ -1,5 +1,5 @@
 ---
-title: Discussion
+title: 讨论
 ---
 
 FIXME

@@ -119,11 +119,13 @@ jobs:
 
       - name: "Run Container and Build Site"
         id: build-and-deploy
-        uses: carpentries/actions/build-and-deploy@v1
-        with:
-          reset: ${{ vars.BUILD_RESET || github.event.inputs.reset || 'false' }}
-          skip-manage-deps: ${{ github.event.inputs.force-skip-manage-deps == 'true' || contains(needs.preflight.outputs.dependency-image-ref, '-deps:') }}
-          lang-code: ${{ vars.LANG_CODE || '' }}
+        # This fork already contains translated lessons. Build them directly,
+        # sharing the local Chinese UI fixes instead of using dovetail.
+        env:
+          BUILD_RESET: ${{ vars.BUILD_RESET || github.event.inputs.reset || 'false' }}
+          SKIP_MANAGE_DEPS: ${{ github.event.inputs.force-skip-manage-deps == 'true' || contains(needs.preflight.outputs.dependency-image-ref, '-deps:') }}
+        run: Rscript scripts/ci-build.R
+        shell: bash
 
   update-container-version:
     name: "Update container version used"

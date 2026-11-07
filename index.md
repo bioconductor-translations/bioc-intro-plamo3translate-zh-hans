@@ -2,13 +2,13 @@
 permalink: index.html
 site: sandpaper::sandpaper_site
 ---
-## About this course
+## 关于本课程
 
 ::::::::::::::::::::::::::::::::::::::::::  prereq
 
-## Prerequisites
+## 先修要求
 
-- Familiarity with tabular data and spreadsheets.
+- 熟悉表格数据和电子表格。
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 

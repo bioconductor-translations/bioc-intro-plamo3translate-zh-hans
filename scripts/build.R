@@ -11,7 +11,7 @@ main <- function() {
   if (length(script) != 1L) stop("Run this script with Rscript")
   root <- dirname(dirname(normalizePath(script, mustWork = TRUE)))
 
-  # LC_ALL=C.UTF-8 prevents gettext from selecting the Japanese theme strings.
+  # LC_ALL=C.UTF-8 prevents gettext from selecting the translated theme strings.
   # This affects this build process only; no shell or system settings are changed.
   Sys.unsetenv("LC_ALL")
   packages <- c("sandpaper", "rmarkdown", "varnish", "jsonlite")
@@ -46,48 +46,11 @@ main <- function() {
   previous_options <- options(sandpaper.use_renv = FALSE)
   on.exit(options(previous_options), add = TRUE)
 
-  # Sandpaper currently exposes no citation-processing configuration hook.
-  # Wrap its Pandoc arguments in memory, then restore the namespace on exit.
-  # No installed package files or global R library contents are modified.
-  ns <- asNamespace("sandpaper")
-  original_pandoc_args <- get("construct_pandoc_args", ns, inherits = FALSE)
-  replace_pandoc_args <- function(fun) {
-    unlockBinding("construct_pandoc_args", ns)
-    assign("construct_pandoc_args", fun, envir = ns)
-    lockBinding("construct_pandoc_args", ns)
-  }
-  bibliography <- normalizePath(file.path(root, "refs.bib"), mustWork = TRUE)
-  replace_pandoc_args(function(path_in, output, to = "html", ...) {
-    result <- original_pandoc_args(path_in, output, to, ...)
-    if (to %in% c("html", "html4", "html5")) {
-      # Resolve citations before lesson.lua transforms challenge/solution divs.
-      result$options <- c("--citeproc", paste0("--bibliography=", bibliography),
-                          result$options)
-    }
-    result
+  source(file.path(root, "scripts", "workbench-customizations.R"), local = TRUE)
+  with_workbench_customizations(root, function() {
+    sandpaper::build_lesson(path = root, rebuild = "--rebuild" %in% args,
+                           quiet = FALSE, preview = FALSE)
   })
-  on.exit(replace_pandoc_args(original_pandoc_args), add = TRUE)
-
-  sandpaper::build_lesson(path = root, rebuild = "--rebuild" %in% args,
-                         quiet = FALSE, preview = FALSE)
-
-  # Varnish has Incubator branding but stores its matching favicons at asset root.
-  assets <- system.file("pkgdown", "assets", package = "varnish")
-  icons <- list.files(assets, full.names = TRUE,
-                      pattern = "^(favicon|apple-touch-icon|android-chrome|mstile|site[.]webmanifest|safari-pinned-tab)")
-  icons <- icons[!file.info(icons)$isdir]
-  destination <- file.path(root, "site", "docs", "favicons", "incubator")
-  dir.create(destination, recursive = TRUE, showWarnings = FALSE)
-  if (!length(icons) || !all(file.copy(icons, destination, overwrite = TRUE))) {
-    stop("Could not copy the bundled favicon assets")
-  }
-  manifest_path <- file.path(destination, "site.webmanifest")
-  manifest <- jsonlite::read_json(manifest_path, simplifyVector = FALSE)
-  manifest$icons <- lapply(manifest$icons, function(icon) {
-    icon$src <- basename(icon$src)
-    icon
-  })
-  jsonlite::write_json(manifest, manifest_path, auto_unbox = TRUE, pretty = TRUE)
   cat("\nBuilt site: ", file.path(root, "site", "docs", "index.html"), "\n", sep = "")
 }
 

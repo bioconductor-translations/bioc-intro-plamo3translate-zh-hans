@@ -70,7 +70,7 @@ def source_files(args, config: dict) -> tuple[dict[str, str], dict]:
             raise ValueError(f"English source directory does not exist: {source}")
         output = args.output_dir.resolve()
         if output.is_relative_to(source) or source.is_relative_to(output):
-            raise ValueError("The English source directory and Japanese output directory must differ and must not be nested inside each other")
+            raise ValueError("The English source directory and translated output directory must differ and must not be nested inside each other")
         paths = sorted(p for p in source.rglob("*") if p.suffix.lower() == ".rmd" and p.is_file())
         files = {p.relative_to(source).as_posix(): p.read_bytes().decode("utf-8") for p in paths}
         provenance = {"directory": str(source)}
@@ -110,10 +110,15 @@ def record_matches(record: dict | None, unit: Unit) -> bool:
                 and unit.file in record.get("files", [record.get("file")]))
 
 
-def memory_translation(record: dict | None, unit: Unit, profile: str) -> str | None:
+def memory_translation(record: dict | None, unit: Unit, profile: str,
+                       target_language: str) -> str | None:
     if not record_matches(record, unit):
         return None
     effective = {**record, **record.get("variants", {}).get(unit.file, {})}
+    # Reviewed records survive model updates, but never a target-language change.
+    # Legacy records inherit the language of the surrounding memory catalog.
+    if effective.get("model", {}).get("target_language", target_language) != target_language:
+        return None
     if effective.get("review_status", "reviewed") == "machine" and effective.get("profile") != profile:
         return None
     return effective["translation"]
@@ -315,7 +320,7 @@ def parser() -> argparse.ArgumentParser:
     cli.add_argument("--cache-only", action="store_true", help="Fail if any translation needs model inference")
     cli.add_argument("--dry-run", action="store_true", help="Show translation requirements without loading MLX or writing files")
     cli.add_argument("--check", action="store_true", help="Replay cached translations and fail if output differs; write nothing")
-    cli.add_argument("--overwrite", action="store_true", help="Explicitly replace locally edited Japanese outputs")
+    cli.add_argument("--overwrite", action="store_true", help="Explicitly replace locally edited translated outputs")
     cli.add_argument("--prune", action="store_true", help="Remove unchanged managed episodes deleted upstream")
     cli.add_argument("--update-memory", action="store_true", help="Save new translations and provenance to versioned translation resources")
     cli.add_argument("--no-patches", action="store_true", help="Omit the separately recorded local build adaptations")
@@ -336,6 +341,12 @@ def run(argv=None, backend_factory=None) -> int:
                  for key in ("memory", "glossary", "contexts", "patches", "manifest")}
     resource_snapshots = {path: file_snapshot(path) for path in resources.values()}
     memory = read_json(resources["memory"])
+    target_language = config["model"]["target_language"]
+    memory_language = memory.get("model", {}).get("target_language")
+    if memory_language != target_language:
+        raise ValueError(f"Translation memory target language {memory_language!r} does not match "
+                         f"configured target {target_language!r}. Select memory for the target "
+                         "language or start with an empty catalog for that language.")
     glossary = read_json(resources["glossary"])
     contexts = read_json(resources["contexts"])["records"]
     patches = [] if args.no_patches else read_json(resources["patches"])["patches"]
@@ -347,9 +358,9 @@ def run(argv=None, backend_factory=None) -> int:
     files, provenance = source_files(args, config)
     docs = {name: extract_document(text, name) for name, text in files.items()}
     prose = " ".join(unit.source for doc in docs.values() for unit in doc.units)
-    japanese = len(re.findall(r"[\u3040-\u30ff\u3400-\u9fff]", prose))
-    if japanese > 100 and japanese > len(prose) / 4:
-        raise ValueError("Source prose appears to be Japanese already; select the upstream English ref")
+    cjk = len(re.findall(r"[\u3040-\u30ff\u3400-\u9fff]", prose))
+    if cjk > 100 and cjk > len(prose) / 4:
+        raise ValueError("Source prose appears to be translated CJK text already; select the upstream English ref")
     cache_path = args.cache_dir / "cache.jsonl"
     cache = load_cache(cache_path)
     translations, needed, seeded, cached = {name: {} for name in docs}, [], 0, 0
@@ -358,7 +369,7 @@ def run(argv=None, backend_factory=None) -> int:
             key = unit_key(unit)
             approved = memory["records"].get(key)
             record = cache.get(cache_key(profile, unit))
-            saved = memory_translation(approved, unit, profile)
+            saved = memory_translation(approved, unit, profile, target_language)
             if saved is not None:
                 translations[unit.file][key] = saved
                 seeded += 1
@@ -402,7 +413,7 @@ def run(argv=None, backend_factory=None) -> int:
             before = snapshots[path]
             expected = managed.get(name, {}).get("translated_sha256")
             if before is not None and expected and digest(before) != expected:
-                raise ValueError(f"Japanese output has local edits: {path}. Review it, or use --overwrite explicitly.")
+                raise ValueError(f"Translated output has local edits: {path}. Review it, or use --overwrite explicitly.")
             if before is not None and not expected:
                 # Fully cached identical outputs are checked again after rendering.
                 if pending:
@@ -476,7 +487,7 @@ def run(argv=None, backend_factory=None) -> int:
                 key = unit_key(unit)
                 record = memory["records"].get(key)
                 output = translations[unit.file][key]
-                if memory_translation(record, unit, profile) == output:
+                if memory_translation(record, unit, profile, target_language) == output:
                     continue
                 variant = {"translation": output, "review_status": "machine",
                            "profile": profile, "model": config["model"]}
@@ -494,7 +505,7 @@ def run(argv=None, backend_factory=None) -> int:
     snapshots[state_path] = state_snapshot
     writes[state_path] = json_bytes(next_state)
     atomic_write_set(writes, snapshots)
-    print(f"Wrote {len(differences)} changed Japanese episodes; {len(outputs) - len(differences)} unchanged.")
+    print(f"Wrote {len(differences)} changed {target_language} episodes; {len(outputs) - len(differences)} unchanged.")
     if skipped:
         print("Upstream or translation changes require review of the listed local build adaptations.")
     return 0

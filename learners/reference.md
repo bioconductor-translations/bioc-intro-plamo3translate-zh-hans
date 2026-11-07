@@ -1,8 +1,8 @@
 ---
-title: Reference
+title: 参考资料
 ---
 
-## Glossary
+## 术语表 {#glossary}
 
 FIXME
 

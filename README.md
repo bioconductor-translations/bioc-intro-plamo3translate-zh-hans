@@ -65,11 +65,21 @@ Community](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcb
 Computational Biology 21 (4): e1012925.
 
 
-## Updating the Japanese episodes
+## Updating the Simplified Chinese episodes
 
 The translation tool reads the English episodes from `upstream/main`, reuses
-the reviewed Japanese translations, and translates changed prose with the
-pinned PLaMo model:
+compatible Simplified Chinese translation memory, and translates changed prose
+with the pinned PLaMo model. The target language is `zh-hans`.
+
+Configure `upstream` to use the English lesson repository. If it does not exist,
+add it with `git remote add upstream https://github.com/carpentries-incubator/bioc-intro.git`.
+If it currently points to a translated fork, update it before fetching:
+
+```sh
+git remote set-url upstream https://github.com/carpentries-incubator/bioc-intro.git
+```
+
+Then preview and apply the translation update:
 
 ```sh
 git fetch upstream main
@@ -78,7 +88,8 @@ uv run --locked scripts/translate.py --source-ref upstream/main --update-memory
 ```
 
 See [the translation guide](translation/README.md) for setup, offline replay,
-reviewing new translations, and protecting local edits.
+reviewing new translations, and protecting local edits. Machine-generated
+Simplified Chinese translations need review before they are marked `reviewed`.
 
 ## Testing locally
 
@@ -89,21 +100,28 @@ the network:
 python3.12 -m unittest discover -s tests -v
 ```
 
-To build the translated site with Japanese navigation, bibliography citations,
-and theme icons, run:
+To build the translated site with Simplified Chinese navigation, bibliography
+citations, and theme icons, run:
 
 ```sh
 Rscript scripts/build.R
 ```
 
 The rendered site is written to `site/docs/`. Add `--rebuild` to regenerate
-all lesson code output.
+all lesson code output. Use this build script to apply the bundled Simplified
+Chinese navigation and interface labels from `translation/ui-zh-hans.json`;
+the installed Workbench packages do not include this language.
+The build-and-deploy workflow uses `scripts/ci-build.R` with the same Chinese
+labels, citation processing, and theme icons before the standard deployment.
 
-To test locally, run the following in the lessons directory:
+To preview the generated site locally, run the following in the lesson directory:
 
-```r
-sandpaper::serve()
+```sh
+python3 -m http.server --directory site/docs 8000
 ```
+
+Open <http://localhost:8000> in a browser. Re-run `Rscript scripts/build.R` after
+editing lesson content so the bundled Chinese labels remain applied.
 
 For more details, see the [workbench installation
 instructions](https://carpentries.github.io/workbench/#installation).

@@ -1,4 +1,4 @@
-"""Preservation checks for the source-to-Japanese lesson translation workflow.
+"""Preservation checks for the English-to-Simplified-Chinese lesson workflow.
 
 These fixtures deliberately include syntax that can look like translatable prose.
 They run without MLX, model weights, network access, or an R installation.
@@ -85,13 +85,13 @@ def translated_lesson(source=LESSON, filename="lesson.Rmd"):
     translations = identity_translations(document)
     for unit in document.units:
         translations[core.unit_key(unit)] = (
-            unit.masked.replace("An English lesson", "日本語のレッスン")
-            .replace("Learn about R.", "Rについて学びます。")
-            .replace("Inspecting data", "データの確認")
-            .replace("A challenge", "課題")
-            .replace("Find the value.", "値を求めてください。")
-            .replace("Solution", "解答")
-            .replace("The answer is shown below.", "解答を以下に示します。")
+            unit.masked.replace("An English lesson", "简体中文课程")
+            .replace("Learn about R.", "学习 R。")
+            .replace("Inspecting data", "检查数据")
+            .replace("A challenge", "练习")
+            .replace("Find the value.", "求出该值。")
+            .replace("Solution", "答案")
+            .replace("The answer is shown below.", "答案如下。")
         )
     return document, core.render_document(document, translations)
 
@@ -99,11 +99,11 @@ def translated_lesson(source=LESSON, filename="lesson.Rmd"):
 class LessonPreservationTests(unittest.TestCase):
     def test_translates_prose_while_preserving_nested_fences_and_code(self):
         document, output = translated_lesson()
-        self.assertIn("日本語のレッスン", output)
-        self.assertIn("- Rについて学びます。", output)
-        self.assertIn("## データの確認", output)
-        self.assertIn("1. 値を求めてください。", output)
-        self.assertIn("## 解答", output)
+        self.assertIn("简体中文课程", output)
+        self.assertIn("- 学习 R。", output)
+        self.assertIn("## 检查数据", output)
+        self.assertIn("1. 求出该值。", output)
+        self.assertIn("## 答案", output)
         fence_lines = lambda text: [
             line for line in text.splitlines(keepends=True)
             if re.match(r"^\s*:{3,}", line)
@@ -126,7 +126,7 @@ class LessonPreservationTests(unittest.TestCase):
         for line in ("source: Rmd", "teaching: 10", "exercises: 15"):
             self.assertIn(line + "\n", output)
         title_line = next(line for line in output.splitlines() if line.startswith("title:"))
-        self.assertEqual(json.loads(title_line.partition(":")[2].strip()), "日本語のレッスン")
+        self.assertEqual(json.loads(title_line.partition(":")[2].strip()), "简体中文课程")
 
     def test_heading_identifiers_are_restored_at_the_end(self):
         source = "## Inspecting data {#stable-id}\n"
@@ -134,7 +134,7 @@ class LessonPreservationTests(unittest.TestCase):
         self.assertEqual(len(document.units), 1)
         unit = document.units[0]
         marker = unit.masked[unit.masked.index("<x"):]
-        output = core.render_document(document, {core.unit_key(unit): "データ " + marker + " の確認"})
+        output = core.render_document(document, {core.unit_key(unit): "数据 " + marker + " 的检查"})
         self.assertRegex(output.rstrip(), r"^## .* \{#stable-id\}$")
         self.assertEqual(output.count("{#stable-id}"), 1)
         core.validate_document(source, output, "heading.Rmd")
@@ -147,6 +147,18 @@ class LessonPreservationTests(unittest.TestCase):
         self.assertEqual(len(markers), 2)
         output = core.render_document(document, {
             core.unit_key(unit): "日本語" + markers[0] + "を参照。" + markers[1] + "も参照。"
+        })
+        for token in unit.tokens:
+            self.assertIn(" " + token + " ", output)
+        core.validate_document(source, output, "citations.Rmd")
+
+    def test_citations_have_boundaries_next_to_chinese_text(self):
+        source = "See @Broman:2018 and @ref(sec:genvec).\n"
+        document = core.extract_document(source, "citations.Rmd")
+        unit = document.units[0]
+        markers = re.findall(r"<x\d+/>", unit.masked)
+        output = core.render_document(document, {
+            core.unit_key(unit): "参见" + markers[0] + "和" + markers[1] + "。"
         })
         for token in unit.tokens:
             self.assertIn(" " + token + " ", output)
@@ -399,10 +411,10 @@ class FakeBackend:
         for request in requests:
             self.seen.append(request.unit.source)
             if self.invalid_source and self.invalid_source in request.unit.source:
-                result.append("トークンが欠けた訳文です。")
+                result.append("缺少占位符的译文。")
             else:
                 markers = " ".join(re.findall(r"<x\d+/>", request.unit.masked))
-                result.append("テスト用の日本語訳です。" + markers)
+                result.append("用于测试的简体中文译文。" + markers)
         return result
 
 
@@ -417,7 +429,7 @@ class TranslationCliTests(unittest.TestCase):
         self.base = Path(self.directory.name)
         self.source = self.base / "english"
         self.source.mkdir()
-        self.output = self.base / "japanese"
+        self.output = self.base / "chinese"
         self.cache = self.base / "cache"
         self.arguments = [
             "--source-dir", str(self.source),
@@ -479,21 +491,79 @@ class TranslationCliTests(unittest.TestCase):
         self.run_cli(backend=backend)
         self.assertEqual(backend.seen, ["A newly inserted cache-fixture paragraph."])
 
+    def test_memory_for_another_target_language_is_rejected_before_inference(self):
+        _, config, directory = self.copy_translation_resources()
+        self.write_source("A target-language isolation fixture paragraph.\n")
+        memory_path = directory / config["memory"]
+        memory = json.loads(memory_path.read_text())
+        memory["model"]["target_language"] = (
+            "ja" if config["model"]["target_language"] != "ja" else "zh-hans"
+        )
+        memory_path.write_text(json.dumps(memory, ensure_ascii=False))
+        before = memory_path.read_bytes()
+        with self.assertRaisesRegex(ValueError, "Translation memory target language.*does not match"):
+            self.run_cli(["--update-memory"], forbid_backend=True)
+        self.assertEqual(memory_path.read_bytes(), before)
+        self.assertFalse(self.output.exists())
+        self.assertFalse(self.cache.exists())
+
+    def test_reviewed_record_or_variant_from_another_language_is_not_replayed(self):
+        _, config, directory = self.copy_translation_resources()
+        source = "A reviewed target-language fixture paragraph.\n"
+        self.write_source(source)
+        unit = core.extract_document(source, "new-lesson.Rmd").units[0]
+        other_language = "ja" if config["model"]["target_language"] != "ja" else "zh-hans"
+        translation = {"translation": "別の言語の訳文です。", "review_status": "reviewed",
+                       "model": {**config["model"], "target_language": other_language}}
+        memory_path = directory / config["memory"]
+        memory = json.loads(memory_path.read_text())
+        for use_variant in (False, True):
+            with self.subTest(use_variant=use_variant):
+                record = {"source": unit.masked, "kind": unit.kind, "files": [unit.file]}
+                if use_variant:
+                    record.update({"translation": "正确的基础译文。", "review_status": "reviewed",
+                                   "variants": {unit.file: translation}})
+                else:
+                    record.update(translation)
+                memory["records"] = {core.unit_key(unit): record}
+                memory_path.write_text(json.dumps(memory, ensure_ascii=False))
+                with self.assertRaisesRegex(ValueError, "1 uncached passages"):
+                    self.run_cli(["--cache-only"], forbid_backend=True)
+                self.assertFalse(self.output.exists())
+
+    def test_reviewed_same_language_memory_survives_model_revision_changes(self):
+        config_path, config, directory = self.copy_translation_resources()
+        source = "A reviewed model-revision fixture paragraph.\n"
+        self.write_source(source)
+        unit = core.extract_document(source, "new-lesson.Rmd").units[0]
+        memory_path = directory / config["memory"]
+        memory = json.loads(memory_path.read_text())
+        memory["records"] = {core.unit_key(unit): {
+            "source": unit.masked, "kind": unit.kind, "files": [unit.file],
+            "translation": "已审核的译文。", "review_status": "reviewed",
+            "profile": "an-earlier-prompt-profile", "model": dict(config["model"]),
+        }}
+        memory_path.write_text(json.dumps(memory, ensure_ascii=False))
+        config["model"]["revision"] = "0" * 40
+        config_path.write_text(json.dumps(config, ensure_ascii=False))
+        self.run_cli(["--cache-only"], forbid_backend=True)
+        self.assertEqual((self.output / unit.file).read_text(), "已审核的译文。\n")
+
     def test_identical_prose_in_different_lessons_keeps_its_own_translation(self):
         self.write_source("A context-sensitive repeated fixture paragraph.\n", "first.Rmd")
         self.write_source("A context-sensitive repeated fixture paragraph.\n", "second.Rmd")
 
         class PerFileBackend:
             def translate_batch(self, requests):
-                return ["最初のレッスンの訳文です。" if request.unit.file == "first.Rmd"
-                        else "次のレッスンの訳文です。" for request in requests]
+                return ["第一课的译文。" if request.unit.file == "first.Rmd"
+                        else "第二课的译文。" for request in requests]
 
         self.run_cli(backend=PerFileBackend())
-        self.assertIn("最初のレッスン", (self.output / "first.Rmd").read_text())
-        self.assertIn("次のレッスン", (self.output / "second.Rmd").read_text())
+        self.assertIn("第一课", (self.output / "first.Rmd").read_text())
+        self.assertIn("第二课", (self.output / "second.Rmd").read_text())
         self.run_cli(["--cache-only"], forbid_backend=True)
-        self.assertIn("最初のレッスン", (self.output / "first.Rmd").read_text())
-        self.assertIn("次のレッスン", (self.output / "second.Rmd").read_text())
+        self.assertIn("第一课", (self.output / "first.Rmd").read_text())
+        self.assertIn("第二课", (self.output / "second.Rmd").read_text())
 
     def test_persisted_machine_memory_is_invalidated_by_prompt_profile_changes(self):
         config_path, config, directory = self.copy_translation_resources()
@@ -520,7 +590,7 @@ class TranslationCliTests(unittest.TestCase):
                     updated["context"] += " A revised translation context."
                 elif changed == "glossary":
                     glossary = json.loads(original_glossary)
-                    glossary.append({"source": "fixture", "target": "フィクスチャ"})
+                    glossary.append({"source": "fixture", "target": "测试数据"})
                     glossary_path.write_text(json.dumps(glossary, ensure_ascii=False))
                 elif changed == "mouse_dataset_files":
                     updated["mouse_dataset_files"] = ["new-lesson.Rmd"]
@@ -538,8 +608,8 @@ class TranslationCliTests(unittest.TestCase):
 
         class PerFileBackend:
             def translate_batch(self, requests):
-                return ["一つ目のファイルの訳です。" if request.unit.file == "first.Rmd"
-                        else "二つ目のファイルの訳です。" for request in requests]
+                return ["第一个文件的译文。" if request.unit.file == "first.Rmd"
+                        else "第二个文件的译文。" for request in requests]
 
         self.run_cli(["--update-memory"], backend=PerFileBackend())
         expected = {name: (self.output / name).read_bytes() for name in ("first.Rmd", "second.Rmd")}
@@ -563,7 +633,7 @@ class TranslationCliTests(unittest.TestCase):
 
             def translate_batch(self, requests):
                 data = json.loads(memory_path.read_text())
-                data["human_annotation"] = "翻訳の実行中に追加された手動のレビュー記録です。"
+                data["human_annotation"] = "翻译过程中手动添加的审核记录。"
                 self.edited_bytes = (json.dumps(data, ensure_ascii=False) + "\n").encode()
                 memory_path.write_bytes(self.edited_bytes)
                 return super().translate_batch(requests)
@@ -609,13 +679,13 @@ class TranslationCliTests(unittest.TestCase):
         self.write_source("A dirty-output fixture paragraph.\n")
         self.run_cli()
         target = self.output / "new-lesson.Rmd"
-        edited = target.read_text() + "\n手作業で修正した本文です。\n"
+        edited = target.read_text() + "\n手动修改的正文。\n"
         target.write_text(edited)
         with self.assertRaises(ValueError):
             self.run_cli(["--cache-only"], forbid_backend=True)
         self.assertEqual(target.read_text(), edited)
         self.run_cli(["--cache-only", "--overwrite"], forbid_backend=True)
-        self.assertNotIn("手作業で修正した本文", target.read_text())
+        self.assertNotIn("手动修改的正文", target.read_text())
 
     def test_source_directory_cannot_be_used_as_output_directory(self):
         self.write_source("An English source-preservation fixture paragraph.\n")
@@ -632,7 +702,7 @@ class TranslationCliTests(unittest.TestCase):
             with self.subTest(source_contains_output=source_contains_output):
                 directory = self.base / ("source-parent" if source_contains_output else "output-parent")
                 source = directory if source_contains_output else directory / "english"
-                output = directory / "japanese" if source_contains_output else directory
+                output = directory / "chinese" if source_contains_output else directory
                 source.mkdir(parents=True)
                 original = b"A nested-directory safety fixture paragraph.\n"
                 (source / "fixture.Rmd").write_bytes(original)
@@ -652,7 +722,7 @@ class TranslationCliTests(unittest.TestCase):
         outside = self.base / "outside-output"
         outside.mkdir()
         protected = outside / "fixture.Rmd"
-        original = "出力先の外にある既存のファイルです。\n".encode()
+        original = "输出目录之外的现有文件。\n".encode()
         protected.write_bytes(original)
         (self.output / "nested").symlink_to(outside, target_is_directory=True)
         with self.assertRaises(ValueError):
@@ -677,13 +747,13 @@ class TranslationCliTests(unittest.TestCase):
         self.run_cli()
         (self.source / "removed.Rmd").unlink()
         removed = self.output / "removed.Rmd"
-        removed.write_text(removed.read_text() + "\n手作業のメモです。\n")
+        removed.write_text(removed.read_text() + "\n手动添加的备注。\n")
         unmanaged = self.output / "personal-notes.Rmd"
-        unmanaged.write_text("翻訳ツールの管理外のメモです。\n")
+        unmanaged.write_text("翻译工具管理范围之外的备注。\n")
         with self.assertRaises(ValueError):
             self.run_cli(["--cache-only", "--prune"], forbid_backend=True)
-        self.assertIn("手作業のメモ", removed.read_text())
-        self.assertEqual(unmanaged.read_text(), "翻訳ツールの管理外のメモです。\n")
+        self.assertIn("手动添加的备注", removed.read_text())
+        self.assertEqual(unmanaged.read_text(), "翻译工具管理范围之外的备注。\n")
 
     def test_write_failure_restores_the_entire_previous_output_set(self):
         self.write_source("First rollback fixture paragraph.\n", "first.Rmd")

@@ -1,160 +1,147 @@
 ---
-title: Setup
+title: 环境配置
 ---
 
-- Please make sure you have a spreadsheet editor at hand, such as
-  LibreOffice, Microsoft Excel or Google Sheets.
+- 请确保已准备好电子表格编辑软件，例如
+  LibreOffice、Microsoft Excel 或 Google Sheets。
 
-- Install R, RStudio and packages (see below).
+- 安装 R、RStudio 和所需的包（见下文）。
 
-### R and RStudio
+### R 和 RStudio
 
-- R and RStudio are separate downloads and installations. R is the
-  underlying statistical computing environment, but using R alone is
-  no fun. RStudio is a graphical integrated development environment
-  (IDE) that makes using R much easier and more interactive. You need
-  to install R before you install RStudio. After installing both
-  programs, you will need to install some specific R packages within
-  RStudio. Follow the instructions below for your operating system,
-  and then follow the instructions to install packages.
+- R 和 RStudio 需要分别下载和安装。R 是底层的统计计算环境，
+  但单独使用 R 并不有趣。RStudio 是一个图形化集成开发环境
+  （IDE），让 R 的使用更加便捷，交互也更加方便。
+  安装 RStudio 前，需要先安装 R。安装好这两个程序后，
+  还需要在 RStudio 中安装一些特定的 R 包。
+  请按照下方适用于您操作系统的说明进行操作，
+  然后按照说明安装所需的包。
 
-### You are running Windows
-
-<br>
-
-:::::::::::::::  solution
-
-## If you already have R and RStudio installed
-
-- Open RStudio, and click on "Help" > "Check for updates". If a new version is
-  available, quit RStudio, and download the latest version for RStudio.
-
-- To check which version of R you are using, start RStudio and the first thing
-  that appears in the console indicates the version of R you are
-  running. Alternatively, you can type `sessionInfo()`, which will also display
-  which version of R you are running. Go on
-  the [CRAN website](https://cran.r-project.org/bin/windows/base/) and check
-  whether a more recent version is available. If so, please download and install
-  it. You can [check here](https://cran.r-project.org/bin/windows/base/rw-FAQ.html#How-do-I-UNinstall-R_003f) for
-  more information on how to remove old versions from your system if you wish to do so.
-
-- Follow the steps in the instructions [for everyone](#for-everyone) at the
-  bottom of this page.
-
-
-:::::::::::::::::::::::::
-
-:::::::::::::::  solution
-
-## If you don't have R and RStudio installed
-
-- Download R from
-  the [CRAN website](https://cran.r-project.org/bin/windows/base/release.htm).
-
-- Run the `.exe` file that was just downloaded
-
-- Go to the [RStudio download page](https://www.rstudio.com/products/rstudio/download/#download)
-
-- Under *All Installers* select **RStudio xxxx.yy.zz-uuu.exe - Windows 10/11** (where x, y, z, and u represent version numbers)
-
-- Double click the file to install it
-
-- Once it's installed, open RStudio to make sure it works and you don't get any
-  error messages
-
-- Follow the steps in the instructions [for everyone](#for-everyone) at the
-  bottom of this page.
-
-
-:::::::::::::::::::::::::
-
-### You are running macOS
+### Windows 用户
 
 <br>
 
 :::::::::::::::  solution
 
-## If you already have R and RStudio installed
+## 如果已经安装了 R 和 RStudio
 
-- Open RStudio, and click on "Help" > "Check for updates". If a new version is
-  available, quit RStudio, and download the latest version for RStudio.
+- 打开 RStudio，点击 "Help" > "Check for updates"。如果有新版本，
+  请退出 RStudio，然后下载最新版本的 RStudio。
 
-- To check the version of R you are using, start RStudio and the first thing
-  that appears on the terminal indicates the version of R you are running. Alternatively, you can type `sessionInfo()`, which will
-  also display which version of R you are running. Go on
-  the [CRAN website](https://cran.r-project.org/bin/macosx/) and check
-  whether a more recent version is available. If so, please download and install
-  it.
+- 要查看正在使用的 R 版本，请启动 RStudio，控制台最先显示的信息中
+  会包含当前的 R 版本。也可以输入 `sessionInfo()`，
+  该命令同样会显示正在运行的 R 版本。请访问
+  [CRAN 网站](https://cran.r-project.org/bin/windows/base/)，查看是否有更新版本。
+  如果有，请下载并安装。如果想从系统中删除旧版本，
+  可以[在此查看](https://cran.r-project.org/bin/windows/base/rw-FAQ.html#How-do-I-UNinstall-R_003f)
+  相关说明。
 
-- Follow the steps in the instructions [for everyone](#for-everyone) at the
-  bottom of this page.
+- 按照本页底部[所有用户](#for-everyone)一节中的步骤操作。
 
 
 :::::::::::::::::::::::::
 
 :::::::::::::::  solution
 
-## If you don't have R and RStudio installed
+## 如果尚未安装 R 和 RStudio
 
-- Download R from
-  the [CRAN website](https://cran.r-project.org/bin/macosx/).
+- 从 [CRAN 网站](https://cran.r-project.org/bin/windows/base/release.htm)
+  下载 R。
 
-- Select the `.pkg` file for the latest R version
+- 运行刚刚下载的 `.exe` 文件。
 
-- Double click on the downloaded file to install R
+- 访问 [RStudio 下载页面](https://www.rstudio.com/products/rstudio/download/#download)。
 
-- It is also a good idea to install [XQuartz](https://www.xquartz.org/) (needed
-  by some packages)
+- 在 *All Installers* 下选择 **RStudio xxxx.yy.zz-uuu.exe - Windows 10/11**（其中 x、y、z 和 u 表示版本号）。
 
-- Go to the [RStudio download page](https://www.rstudio.com/products/rstudio/download/#download)
+- 双击该文件进行安装。
 
-- Under *All Installers* select **RStudio xxxx.yy.zz-uuu.dmg - macOS 10.15+** (where x, y, z, and u represent version numbers)
+- 安装完成后，打开 RStudio，确认它可以正常运行，且没有出现错误信息。
 
-- Double click the file to install RStudio
-
-- Once it's installed, open RStudio to make sure it works and you don't get any
-  error messages.
-
-- Follow the steps in the instructions [for everyone](#for-everyone) at the
-  bottom of this page.
+- 按照本页底部[所有用户](#for-everyone)一节中的步骤操作。
 
 
 :::::::::::::::::::::::::
 
-### You are running Linux
+### macOS 用户
 
 <br>
 
 :::::::::::::::  solution
 
-## Install R using your package manager and RStudio
+## 如果已经安装了 R 和 RStudio
 
-- Follow the instructions for your distribution
-  from [CRAN](https://cloud.r-project.org/bin/linux), they provide information
-  to get the most recent version of R for common distributions. For most
-  distributions, you could use your package manager (e.g., for Debian/Ubuntu run
-  `sudo apt-get install r-base`, and for Fedora `sudo yum install R`), but we
-  don't recommend this approach as the versions provided by this are
-  usually out of date. In any case, make sure you have at least R 4.2.0.
-- Go to the [RStudio download
-  page](https://www.rstudio.com/products/rstudio/download/#download)
-- Under *All Installers* select the version that matches your distribution, and
-  install it with your preferred method (e.g., with Debian/Ubuntu `sudo dpkg -i rstudio-xxxx.yy.zz-uuu-amd64.deb` at the terminal).
-- Once it's installed, open RStudio to make sure it works and you don't get any
-  error messages.
-- Follow the steps in the [instructions for everyone](#for-everyone)
+- 打开 RStudio，点击 "Help" > "Check for updates"。如果有新版本，
+  请退出 RStudio，然后下载最新版本的 RStudio。
+
+- 要查看正在使用的 R 版本，请启动 RStudio，终端最先显示的信息中
+  会包含当前的 R 版本。也可以输入 `sessionInfo()`，
+  该命令同样会显示正在运行的 R 版本。请访问
+  [CRAN 网站](https://cran.r-project.org/bin/macosx/)，查看是否有更新版本。
+  如果有，请下载并安装。
+
+- 按照本页底部[所有用户](#for-everyone)一节中的步骤操作。
 
 
 :::::::::::::::::::::::::
 
-### For everyone
+:::::::::::::::  solution
 
-After installing R and RStudio, you need to install a couple of
-packages that will be used during the workshop. We will also learn
-about package installation during the course to explain the following
-commands. For now, simply follow the instructions below:
+## 如果尚未安装 R 和 RStudio
 
-- Start RStudio by double-clicking the icon and then type:
+- 从 [CRAN 网站](https://cran.r-project.org/bin/macosx/)
+  下载 R。
+
+- 选择最新 R 版本的 `.pkg` 文件。
+
+- 双击下载的文件以安装 R。
+
+- 还建议安装 [XQuartz](https://www.xquartz.org/)（某些包需要使用它）。
+
+- 访问 [RStudio 下载页面](https://www.rstudio.com/products/rstudio/download/#download)。
+
+- 在 *All Installers* 下选择 **RStudio xxxx.yy.zz-uuu.dmg - macOS 10.15+**（其中 x、y、z 和 u 表示版本号）。
+
+- 双击该文件以安装 RStudio。
+
+- 安装完成后，打开 RStudio，确认它可以正常运行，且没有出现错误信息。
+
+- 按照本页底部[所有用户](#for-everyone)一节中的步骤操作。
+
+
+:::::::::::::::::::::::::
+
+### Linux 用户
+
+<br>
+
+:::::::::::::::  solution
+
+## 使用包管理器安装 R，并安装 RStudio
+
+- 请按照 [CRAN](https://cloud.r-project.org/bin/linux) 上适用于您发行版的说明操作。
+  其中介绍了如何为常见发行版获取最新版本的 R。对于大多数发行版，
+  也可以使用包管理器（例如，在 Debian/Ubuntu 上运行
+  `sudo apt-get install r-base`，在 Fedora 上运行 `sudo yum install R`），
+  但我们不推荐这种方法，因为通过这种方式提供的版本通常已经过时。
+  无论使用哪种方式，请确保 R 版本至少为 4.2.0。
+- 访问 [RStudio 下载页面](https://www.rstudio.com/products/rstudio/download/#download)。
+- 在 *All Installers* 下选择与您发行版匹配的版本，
+  然后使用您偏好的方式安装（例如，在 Debian/Ubuntu 上，
+  可以在终端中运行 `sudo dpkg -i rstudio-xxxx.yy.zz-uuu-amd64.deb`）。
+- 安装完成后，打开 RStudio，确认它可以正常运行，且没有出现错误信息。
+- 按照[所有用户的说明](#for-everyone)操作。
+
+
+:::::::::::::::::::::::::
+
+### 所有用户 {#for-everyone}
+
+安装 R 和 RStudio 后，还需要安装本次工作坊中使用的一些包。
+我们也会在课程中学习如何安装包，并解释下列命令。
+现在，请先按照以下说明操作：
+
+- 双击图标启动 RStudio，然后输入：
 
 ```r
 install.packages(c("BiocManager", "remotes"))

@@ -1,9 +1,9 @@
-# Updating the Japanese translation
+# Updating the Simplified Chinese translation
 
 Run these commands from the repository root. The translator reads English Rmd
-files from a Git revision and writes Japanese Rmd files under `episodes/`.
-It reads the source revision without checking it out or merging it into the
-working tree.
+files from a Git revision and writes Simplified Chinese Rmd files under
+`episodes/`. It reads the source revision without checking it out or merging it
+into the working tree. The translation target is `zh-hans` (中国語（簡体字）).
 
 ## Requirements
 
@@ -24,8 +24,10 @@ revision, or an `hf download --local-dir` directory with its `.cache/`
 metadata intact.
 
 Cached replay and planning work with Python 3.12 alone, on any platform, without
-loading MLX or downloading weights. The initial reviewed memory contains 945
-translation records, including instructor notes in HTML comments.
+loading MLX or downloading weights. The Simplified Chinese translation memory
+is machine generated and needs review, including instructor notes in HTML comments.
+The configured `form` is `null`: PLaMo's formality option applies to Japanese
+translation and is not used for Simplified Chinese.
 
 ## Preview an upstream update
 
@@ -33,6 +35,13 @@ If this clone has no `upstream` remote, add it once:
 
 ```sh
 git remote add upstream https://github.com/carpentries-incubator/bioc-intro.git
+```
+
+If `upstream` already points to a translated fork, point it to the English
+lesson repository before fetching:
+
+```sh
+git remote set-url upstream https://github.com/carpentries-incubator/bioc-intro.git
 ```
 
 Fetch the English revision and inspect the translation plan:
@@ -58,9 +67,10 @@ git diff -- episodes translation
 Rscript scripts/build.R
 ```
 
-Unchanged passages reuse the reviewed memory. New or changed prose is sent to
-the pinned model. Review new Japanese text for technical terminology, exercise
-conditions, and meaning before committing the lesson and memory changes.
+Unchanged passages reuse compatible translation memory. New or changed prose
+is sent to the pinned model. Review new Simplified Chinese text for technical
+terminology, exercise conditions, and meaning before committing the lesson and
+memory changes.
 The tool does not commit or push changes.
 
 To check whether the available memory reproduces the current files, without
@@ -74,12 +84,19 @@ This check requires every source passage to be cached. If upstream has new
 uncached prose, it reports that translation is needed. Use `--cache-only` for a
 normal update that must also be completed entirely from memory.
 
+To reproduce the initial Simplified Chinese translation from its pinned English
+revision, use that revision explicitly:
+
+```sh
+python3.12 scripts/translate.py --source-ref e298f2befb10a4a45b5a0b3f4732558a824ab1fb --check
+```
+
 ## Protecting local edits and lesson structure
 
 The translator checks output hashes against the supplied baseline and the last
-successful run. It stops before replacing an edited Japanese lesson. Review or
-save those edits first; `--overwrite` explicitly permits replacing edited
-outputs.
+successful run. It stops before replacing an edited Simplified Chinese lesson.
+Review or save those edits first; `--overwrite` explicitly permits replacing
+edited outputs.
 
 Carpentries colon fences, full code blocks, commented-out code, inline code,
 link destinations, identifiers, and other protected syntax are kept out of the model's
@@ -105,7 +122,7 @@ Review skipped adaptations when upstream changes their source excerpts.
 Use a local English episode directory instead of a Git revision when needed:
 
 ```sh
-uv run --locked scripts/translate.py --source-dir /path/to/english/episodes --output-dir /path/to/japanese/episodes
+uv run --locked scripts/translate.py --source-dir /path/to/english/episodes --output-dir /path/to/chinese/episodes
 ```
 
 Choose separate directory trees: the input and output directories must differ
@@ -120,9 +137,14 @@ The versioned resources in this directory are:
 
 - `config.json`: model revision, source remote, prompt settings, and resource
   paths. Use `--config /path/to/config.json` to select another configuration.
-- `seed-cache.json`: the reusable reviewed translations, keyed by normalized
+- `seed-cache.json`: reusable Simplified Chinese translations, keyed by normalized
   masked source text and unit kind, and restricted to their episode filenames.
-- `glossary.json`: shared English-to-Japanese terminology.
+- `glossary.json`: shared English and Simplified Chinese terminology.
+- `ui-zh-hans.json`: Simplified Chinese navigation and interface labels applied
+  by `Rscript scripts/build.R`. Use this script when building the translated
+  site, since the installed Workbench packages do not include this language.
+  The deployment workflow uses `scripts/ci-build.R` and shares these settings
+  through `scripts/workbench-customizations.R`.
 - `reviewed-context.json`: disambiguation and glossary overrides selected by
   exact source keys and filenames, rather than paragraph numbers.
 - `source-manifest.json`: English revision, model provenance, and file hashes.
@@ -140,10 +162,11 @@ reviewed translation or refine its context/glossary before rerunning.
 
 Generated memory records retain the profile of the model, prompt, glossary,
 and context settings used to create them. Changing those settings requires
-fresh generation for those machine records. The initial 945 reviewed records
-remain stable for matching source text in their original episodes. The same
-English text can have separate translations in different episodes, so adding a
-translation in one chapter does not replace another chapter's wording.
+fresh generation for those machine records. Translation memory must match the
+configured source and target languages; Japanese records cannot be reused for
+`zh-hans`. The same English text can have separate translations in different
+episodes, so adding a translation in one chapter does not replace another
+chapter's wording.
 
 The translator updates Rmd lessons only. Synchronize upstream images, datasets,
 and other supporting files separately. Review `config.yaml` episode ordering
